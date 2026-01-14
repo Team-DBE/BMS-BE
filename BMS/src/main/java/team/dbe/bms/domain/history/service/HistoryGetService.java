@@ -11,8 +11,8 @@ import java.util.List;
 public class HistoryGetService {
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public List<Object> getAllHistory(Long deviceId) {
-        String key = "device:" + deviceId + ":history";
+    public List<Object> getAllHistory(String serialNumber) {
+        String key = "device:" + serialNumber;
         return redisTemplate.opsForList().range(key, 0, -1);
     }
 }

@@ -15,8 +15,8 @@ import java.util.List;
 public class HistoryController {
     private final HistoryGetService historyGetService;
 
-    @GetMapping("/all/{deviceId}")
-    public List<Object> getHistoryGetService(@PathVariable Long deviceId) {
-        return historyGetService.getAllHistory(deviceId);
+    @GetMapping("/all/{serialNumber}")
+    public List<Object> getHistoryGetService(@PathVariable String serialNumber) {
+        return historyGetService.getAllHistory(serialNumber);
     }
 }

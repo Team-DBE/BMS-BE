@@ -1,18 +1,16 @@
 package team.dbe.bms.global.config;
 
-import org.springframework.beans.factory.annotation.Configurable;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.*;
 import team.dbe.bms.domain.device.service.SensorWebSocketHandler;
 
-@Configurable
+@Configuration
 @EnableWebSocket
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
 
     private final SensorWebSocketHandler sensorWebSocketHandler;
-
-    public WebSocketConfig(SensorWebSocketHandler sensorWebSocketHandler) {
-        this.sensorWebSocketHandler = sensorWebSocketHandler;
-    }
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
