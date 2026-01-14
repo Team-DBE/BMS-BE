@@ -47,7 +47,7 @@ public class SensorWebSocketHandler extends TextWebSocketHandler {
             sensorData.put("temp", request.temperature());
             sensorData.put("risk", request.risk());
 
-            messagingTemplate.convertAndSend("sub/device/" + request.serialNumber(), sensorData);
+            messagingTemplate.convertAndSend("/sub/device/" + request.serialNumber(), sensorData);
             redisTemplate.opsForHash().putAll(key, sensorData);
             log.info("데이터 송신 - device: {}, temp: {}, risk: {}", request.serialNumber(), sensorData.get("temp"), sensorData.get("risk"));
 
