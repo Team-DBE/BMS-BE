@@ -13,11 +13,14 @@ import team.dbe.bms.domain.device.domain.Device;
 import team.dbe.bms.domain.device.domain.repository.JpaDeviceRepository;
 import team.dbe.bms.domain.device.exception.DeviceNotFoundException;
 import team.dbe.bms.domain.device.presentation.dto.request.SensorDataRequestDto;
+import team.dbe.bms.domain.history.domain.History;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -34,25 +37,19 @@ public class SensorWebSocketHandler extends TextWebSocketHandler {
     public void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) {
         String payload = message.getPayload();
 
-
-
         try {
             SensorDataRequestDto request = objectMapper.readValue(payload, SensorDataRequestDto.class);
             Device device = deviceRepository.findBySerialNumber(request.serialNumber()).orElseThrow(DeviceNotFoundException::new);
             log.info("데이터 수신 - device: {}, temp: {}, risk: {}", request.serialNumber(), request.temperature(), request.risk());
 
             String key = "device:" + request.serialNumber();
-
-            Map<String, Double> sensorData = new HashMap<>();
-            sensorData.put("temp", request.temperature());
-            sensorData.put("risk", request.risk());
-
-            messagingTemplate.convertAndSend("/sub/device/" + request.serialNumber(), sensorData);
-            redisTemplate.opsForHash().putAll(key, sensorData);
-            log.info("데이터 송신 - device: {}, temp: {}, risk: {}", request.serialNumber(), sensorData.get("temp"), sensorData.get("risk"));
-
+            Long currentTime = System.currentTimeMillis();
+            History history = new History(LocalDateTime.now(), device.getId(), request.temperature(), request.risk());
+            redisTemplate.opsForZSet().add(key, history, currentTime);
+            redisTemplate.opsForZSet().removeRangeByScore(key, 0, currentTime - Duration.ofDays(1).toMillis());
+            messagingTemplate.convertAndSend("/sub/device/" + request.serialNumber(), history);
+            log.info("데이터 송신 - device: {}, temp: {}, risk: {}", request.serialNumber(), request.temperature(), request.risk());
             redisTemplate.expire(key, Duration.ofDays(HISTORY_TTL_DAYS));
-
         } catch (DeviceNotFoundException e) {
             log.error(e.getMessage());
         } catch (Exception e) {

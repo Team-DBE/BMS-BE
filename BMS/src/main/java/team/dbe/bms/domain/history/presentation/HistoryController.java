@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import team.dbe.bms.domain.history.service.HistoryGetService;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ public class HistoryController {
     private final HistoryGetService historyGetService;
 
     @GetMapping("/all/{serialNumber}")
-    public List<Object> getHistoryGetService(@PathVariable String serialNumber) {
+    public Set<Object> getHistoryGetService(@PathVariable String serialNumber) {
         return historyGetService.getAllHistory(serialNumber);
     }
 }
