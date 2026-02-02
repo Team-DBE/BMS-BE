@@ -3,7 +3,7 @@ package team.dbe.bms.global.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.*;
-import team.dbe.bms.domain.device.service.SensorWebSocketHandler;
+import team.dbe.bms.domain.history.presentation.SensorWebSocketHandler;
 
 @Configuration
 @EnableWebSocket

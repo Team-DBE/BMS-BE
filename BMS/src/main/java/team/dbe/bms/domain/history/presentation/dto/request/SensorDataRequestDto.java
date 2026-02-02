@@ -1,4 +1,4 @@
-package team.dbe.bms.domain.device.presentation.dto.request;
+package team.dbe.bms.domain.history.presentation.dto.request;
 
 public record SensorDataRequestDto(
         String serialNumber,
