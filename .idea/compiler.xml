@@ -10,16 +10,6 @@
         <module name="bms.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="bms" target="17" />
-    </bytecodeTargetLevel>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="bms" options="-parameters" />
-      <module name="bms.main" options="-parameters" />
-      <module name="bms.test" options="-parameters" />
-      <module name="team.dbe.bms" options="-parameters" />
-    </option>
+    <bytecodeTargetLevel target="17" />
   </component>
 </project>

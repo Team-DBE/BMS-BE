@@ -33,7 +33,7 @@ public class SensorWebSocketHandler extends TextWebSocketHandler {
             SensorDataRequestDto request = objectMapper.readValue(payload, SensorDataRequestDto.class);
             log.info("데이터 수신 - device: {}, temp: {}, risk: {}", request.serialNumber(), request.temperature(), request.risk());
 
-            messagingTemplate.convertAndSend("/sub/device/" + request.serialNumber(), historyLifecycleService.processDeviceHistory(request));
+                messagingTemplate.convertAndSend("/sub/device/" + request.serialNumber(), historyLifecycleService.processDeviceHistory(request));
             log.info("데이터 송신 - device: {}, temp: {}, risk: {}", request.serialNumber(), request.temperature(), request.risk());
         } catch (BmsException e) {
             log.warn(e.getMessage());
